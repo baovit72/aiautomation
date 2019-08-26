@@ -62,6 +62,8 @@ function process(imgPath, opt)
         //Tien hanh lay compound path
         var array = activeDoc.selection;
          var result = [];
+         var offset = 15;
+         while(result.length == 0 && offset <= 200){
         for(var i=  0; i< array.length; i++){
             $.sleep(5);
             //Compound path thi tach ra 
@@ -71,7 +73,7 @@ function process(imgPath, opt)
                         var compoundPathItem = array[i];
                         for(var j = 0; j< compoundPathItem.pathItems.length; j++){
                             try{
-                                    if((Math.abs(array[i].pathItems[j].position[0]  -  placedItem.position[0] )<100&&Math.abs( array[i].pathItems[j].position[1]  -  placedItem.position[1]) <100)  )
+                                    if((Math.abs(array[i].pathItems[j].position[0]  -  placedItem.position[0] )<offset&&Math.abs( array[i].pathItems[j].position[1]  -  placedItem.position[1]) <offset)  )
                                     {
                                              result.push(array[i].pathItems[j].fillColor); 
                                              break;
@@ -84,7 +86,7 @@ function process(imgPath, opt)
                 //Path item thi tien hanh kiem tra
                 else{
                     try{
-                      if((Math.abs(array[i].position[0]  -  placedItem.position[0] )<100 &&Math.abs( array[i].position[1]  -  placedItem.position[1]) < 100)  )
+                      if((Math.abs(array[i].position[0]  -  placedItem.position[0] )<offset &&Math.abs( array[i].position[1]  -  placedItem.position[1]) < offset)  )
                             {
                                      result.push(array[i].fillColor); 
                                      break;
@@ -96,7 +98,7 @@ function process(imgPath, opt)
             catch(e){
                 try{
                     if(array[i] instanceof PathItem)
-                     { if((Math.abs(array[i].position[0]  -  placedItem.position[0] )<100 &&Math.abs( array[i].position[1]  -  placedItem.position[1]) < 100)  )
+                     { if((Math.abs(array[i].position[0]  -  placedItem.position[0] )<offset &&Math.abs( array[i].position[1]  -  placedItem.position[1]) < offset)  )
                             {
                                      result.push(array[i].fillColor); 
                                      break;
@@ -108,8 +110,8 @@ function process(imgPath, opt)
               //  $.writeln(typeof(array[i]));
                 //$.writeln(array[i].toString());
             }
-
-       
+        offset += 10;
+       }
         //Bat dau deselect 
          if(result.length==0) return;
         for(var i=  0; i< array.length; i++){
