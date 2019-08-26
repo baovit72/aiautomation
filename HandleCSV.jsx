@@ -56,7 +56,7 @@ function process(imgPath, opt)
         var pluginItem = placedItem.trace();
         pluginItem.tracing.tracingOptions.loadFromPreset(opt.toString() + " Colors"); 
         //Goi action expand 
-        app.doScript("Composition","Default Actions");
+        app.doScript("Composition","Automation Set");
 
         app.redraw();
         //Tien hanh lay compound path
@@ -126,7 +126,7 @@ function process(imgPath, opt)
                 
                 
             }
-        app.doScript("Clear","Default Actions");
+        app.doScript("Clear","Automation Set");
         //Luu file
         activeDoc.exportFile(new File( generateOutputPath(imgPath)),ExportType.PNG8);
         ///
