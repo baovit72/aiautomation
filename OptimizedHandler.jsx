@@ -57,28 +57,36 @@ function process(imgPath, opt)
         pluginItem.tracing.tracingOptions.loadFromPreset(opt.toString() + " Colors"); 
         //Goi action expand 
         app.doScript("Composition","Automation Set");
-
+       //Deselect all paths
+        app.doScript("Deselect","Automation Set");
         app.redraw();
         //Tien hanh lay compound path
-        var array = activeDoc.selection;
+        var array = activeDoc.pathItems;
          var result = [];
          var offset = 15;
+         var compoundCount = 0, pathItemCount = 0;
+          $.writeln ("Number of path in doc " + array.length.toString());
+           $.writeln ("Position of Placed Item " + placedItem.position[0]+":" + placedItem.position[1]);
          while(result.length == 0 && offset <= 200){
         for(var i=  0; i< array.length; i++){ 
-            $.writeln (array.length.toString());
+           
             //Compound path thi tach ra 
-            try{
+           
                 if(array[i].typename.toLowerCase() === "compoundpathitem" )
                     {
                         var compoundPathItem = array[i];
-                        $.writeln (compoundPathItem.pathItems.length.toString());
+                        $.writeln ("This is a compound path item" + compoundPathItem.pathItems.length.toString());
                         for(var j = 0; j< compoundPathItem.pathItems.length; j++){
                             try{
-                                    if((Math.abs(array[i].pathItems[j].position[0]  -  placedItem.position[0] )<offset&&Math.abs( array[i].pathItems[j].position[1]  -  placedItem.position[1]) <offset)  )
-                                    {
-                                             result.push(array[i].pathItems[j].fillColor); 
-                                             break;
-                                    }  
+                                if(compoundPathItem.pathItems[j].typename.toLowerCase() !== "pathitem") continue;
+                                 compoundCount++;
+                                if((Math.abs(array[i].pathItems[j].position[0]  -  placedItem.position[0] )<offset&&Math.abs( array[i].pathItems[j].position[1]  -  placedItem.position[1]) <offset)  )
+                                {
+                                         result.push(array[i].pathItems[j].fillColor); 
+                                         array[i].pathItems[j].selected = true;
+                                         break;
+                                }  
+                            $.writeln ("Position of Compound Item " + compoundPathItem.pathItems[j].position[0]+ ":" + compoundPathItem.pathItems[j].position[1]); 
                             }
                             catch(e){ }
                             }
@@ -86,74 +94,29 @@ function process(imgPath, opt)
                     }
                 //Path item thi tien hanh kiem tra
                 else{
-                    try{
+                     if(array[i].typename.toLowerCase() !== "pathitem") continue;
                       if((Math.abs(array[i].position[0]  -  placedItem.position[0] )<offset &&Math.abs( array[i].position[1]  -  placedItem.position[1]) < offset)  )
                             {
                                      result.push(array[i].fillColor); 
+                                     array[i].selected = true;
                                      break;
                             }  
-                        }
-                        catch(e){}
+                       // $.writeln ("Position of Path Item " + array[i].position[0]+ ":" + array[i].position[1]);
+                        pathItemCount++;
+                  
                     }
-                }
-            catch(e){
-                try{
-                    if(array[i] instanceof PathItem)
-                     { if((Math.abs(array[i].position[0]  -  placedItem.position[0] )<offset &&Math.abs( array[i].position[1]  -  placedItem.position[1]) < offset)  )
-                            {
-                                     result.push(array[i].fillColor); 
-                                     break;
-                            }  
-                    }
-                    }
-                catch(e){}
-                }
-              //  $.writeln(typeof(array[i]));
-                //$.writeln(array[i].toString());
             }
         offset += 15;
        }
-        //Bat dau deselect 
-         if(result.length==0) return;
-        for(var i=  0; i< array.length; i++){ 
-            //Compound path thi tach ra 
-            try{
-                if(array[i].typename === " compoundPathItem" )
-                    { 
-                        var compoundPathItem = array[i];
-                        for(var j = 0; j< compoundPathItem.pathItems.length; j++){
-                                var item = array[i].pathItems[j];
-                                if(!compare(item.fillColor,result[0])){
-                                   item.selected = false;
-                                    }
-                                
-                                $.writeln(item.fillColor.yellow);
-                                
-                            }
-                      
-                    }
-                //Path item thi tien hanh kiem tra
-                else{
-                         var item = array[i];
-                         if(!compare(item.fillColor,result[0]))
-                                    item.selected = false;
-                         $.writeln(typeof item.fillColor.yellow);
-                    }
-                
-                
+        if(result.length>0){
+            app.doScript("Select same","Automation Set");
+             app.doScript("Clear","Automation Set");
+            //Luu file
+            activeDoc.exportFile(new File( generateOutputPath(imgPath)),ExportType.PNG8);
             }
-        catch(e){
-            try{
-                        var item = array[i];
-                         if(!compare(item.fillColor,result[0]))
-                                    item.selected = false;
-                         $.writeln(typeof item.fillColor.yellow);
-                         }catch(e){};
-            }
-        }
-        app.doScript("Clear","Automation Set");
-        //Luu file
-        activeDoc.exportFile(new File( generateOutputPath(imgPath)),ExportType.PNG8);
+        $.writeln ( "Item in compound:" + compoundCount);
+         $.writeln ( "Items:" + pathItemCount);
+       
         ///
         activeDoc.close(SaveOptions.DONOTSAVECHANGES);
         

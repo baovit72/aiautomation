@@ -3,7 +3,7 @@
 	4175746f6d6174696f6e20536574
 ]
 /isOpen 1
-/actionCount 2
+/actionCount 4
 /action-1 {
 	/name [ 11
 		436f6d706f736974696f6e
@@ -89,5 +89,54 @@
 		/isOn 1
 		/hasDialog 0
 		/parameterCount 0
+	}
+}
+/action-3 {
+	/name [ 8
+		446573656c656374
+	]
+	/keyIndex 0
+	/colorIndex 0
+	/isOpen 1
+	/eventCount 1
+	/event-1 {
+		/useRulersIn1stQuadrant 0
+		/internalName (adobe_deselectAll)
+		/localizedName [ 12
+			446573656c65637420416c6c
+		]
+		/isOpen 0
+		/isOn 1
+		/hasDialog 0
+		/parameterCount 0
+	}
+}
+/action-4 {
+	/name [ 11
+		53656c6563742073616d65
+	]
+	/keyIndex 0
+	/colorIndex 0
+	/isOpen 1
+	/eventCount 1
+	/event-1 {
+		/useRulersIn1stQuadrant 0
+		/internalName (ai_plugin_find)
+		/localizedName [ 8
+			53656c6563743a20
+		]
+		/isOpen 1
+		/isOn 1
+		/hasDialog 0
+		/parameterCount 1
+		/parameter-1 {
+			/key 1851878757
+			/showInPalette -1
+			/type (enumerated)
+			/name [ 15
+				53616d652046696c6c20436f6c6f72
+			]
+			/value 3
+		}
 	}
 }
