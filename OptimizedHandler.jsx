@@ -69,7 +69,7 @@ function process(imgPath, opt)
            $.writeln ("Position of Placed Item " + placedItem.position[0]+":" + placedItem.position[1]);
          while(result.length == 0 && offset <= 200){
         for(var i=  0; i< array.length; i++){ 
-           
+           $.sleep(2);
             //Compound path thi tach ra 
            
                 if(array[i].typename.toLowerCase() === "compoundpathitem" )
@@ -109,15 +109,19 @@ function process(imgPath, opt)
         offset += 15;
        }
         if(result.length>0){
+             $.sleep(1000);
             app.doScript("Select same","Automation Set");
+            $.sleep(1000);
              app.doScript("Clear","Automation Set");
             //Luu file
-            activeDoc.exportFile(new File( generateOutputPath(imgPath)),ExportType.PNG8);
+            var exportOptions = new ExportOptionsPNG24();
+            exportOptions.verticalScale = 416;
+            exportOptions.horizontalScale = 416;
+            activeDoc.exportFile(new File( generateOutputPath(imgPath)),ExportType.PNG24,exportOptions);
             }
         $.writeln ( "Item in compound:" + compoundCount);
-         $.writeln ( "Items:" + pathItemCount);
-       
-        ///
+         $.writeln ( "Items:" + pathItemCount); 
+        ///Thoat tab
         activeDoc.close(SaveOptions.DONOTSAVECHANGES);
         
 } 
