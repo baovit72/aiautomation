@@ -71,19 +71,7 @@ function process(imgPath, opt)
           // $.writeln ("Position of Placed Item " + placedItem.position[0]+":" + placedItem.position[1]);
         var IsDone = false;
        // $.sleep(2000);
-        for(var i=  0; i< array.length; i++){  
-                if(array[i].typename.toLowerCase() === "compoundpathitem" )
-                    {
-                        var compoundPathItem = array[i]; 
-                       compoundPathItem.selected  = false; 
-                    }
-                //Path item thi tien hanh kiem tra
-                else{
-                     if(array[i].typename.toLowerCase() !== "pathitem") continue;
-                       array[i].selected = false; 
-                    }
-            }
-       
+       activeDoc.selection = null;
         for(var i=  0; i< array.length; i++){ 
            //$.sleep(100);
             //Compound path thi tach ra 
@@ -134,14 +122,13 @@ function process(imgPath, opt)
                     }
             }
        
-        if(result.length>0){
-            
+     
             //Luu file
             var exportOptions = new ExportOptionsPNG24();
             exportOptions.verticalScale = 416;
             exportOptions.horizontalScale = 416;
             activeDoc.exportFile(new File( generateOutputPath(imgPath)),ExportType.PNG24,exportOptions);
-            }
+          
         $.writeln ( "Item in compound:" + compoundCount);
          $.writeln ( "Items:" + pathItemCount); 
         ///Thoat tab
